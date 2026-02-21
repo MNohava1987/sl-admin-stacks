@@ -8,10 +8,7 @@ variable "spacelift_api_key_secret" {
   sensitive = true
 }
 
-variable "admin_space_id" {
-  type        = string
-  description = "The ID of the Admin space where stacks will be created"
-}
+# admin_space_id removed - now handled by data lookup in stacks.tf
 
 variable "vcs_integration_id" {
   type        = string

@@ -1,9 +1,16 @@
+# High Assurance: Self-Aware Space Lookup
+# This looks up the Admin space ID by its static path "root/Admin"
+# so we are no longer dependent on hardcoded random IDs.
+data "spacelift_space_by_path" "admin" {
+  path = "root/Admin"
+}
+
 # Dynamic Creation of Management Stacks
 resource "spacelift_stack" "management" {
   for_each = var.child_management_stacks
 
   name                 = each.key
-  space_id             = var.admin_space_id
+  space_id             = data.spacelift_space_by_path.admin.id
   repository           = each.value.repository
   branch               = each.value.branch
   administrative       = true
@@ -17,7 +24,7 @@ locals {
   # List of variables to replicate into all children
   replicated_vars = {
     "TF_VAR_vcs_integration_id"       = var.vcs_integration_id
-    "TF_VAR_admin_space_id"           = var.admin_space_id
+    "TF_VAR_admin_space_id"           = data.spacelift_space_by_path.admin.id
     "TF_VAR_spacelift_api_key_id"     = var.spacelift_api_key_id
     "TF_VAR_spacelift_api_key_secret" = var.spacelift_api_key_secret
   }
