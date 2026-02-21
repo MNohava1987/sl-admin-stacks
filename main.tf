@@ -8,6 +8,7 @@ resource "spacelift_stack" "management" {
   space_id             = data.spacelift_space_by_path.admin.id
   repository           = each.value.repository
   branch               = each.value.branch
+  autodeploy = var.enable_auto_deploy
   administrative       = true
   enable_local_preview = true
 

@@ -32,3 +32,4 @@ variable "child_management_stacks" {
     "admin-modulestacks"   = { repository = "sl-admin-modulestacks" }
   }
 }
+variable "enable_auto_deploy" { type = bool; default = false }
