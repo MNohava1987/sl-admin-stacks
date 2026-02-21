@@ -1,23 +1,15 @@
-variable "spacelift_api_key_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "spacelift_api_key_secret" {
-  type      = string
-  sensitive = true
-}
-
-# The name of the environment this orchestrator owns (e.g. "Prod", "Staging")
-# This is injected by the bootstrap stack.
+# The name of the environment this orchestrator owns (e.g. "Live", "Test")
+# This is injected by the Tier 0 bootstrap stack.
 variable "environment_name" {
   type        = string
   description = "Name of the environment container"
 }
 
-variable "vcs_integration_id" {
+# The assurance tier of this environment (e.g. "tier-2" for critical)
+# This is used to correctly label child stacks for policy enforcement.
+variable "assurance_tier" {
   type        = string
-  description = "GitHub VCS integration id"
+  description = "The assurance tier of the parent environment"
 }
 
 variable "branch_main" {
@@ -25,21 +17,14 @@ variable "branch_main" {
   default = "main"
 }
 
-variable "child_management_stacks" {
-  type = map(object({
-    repository = string
-    branch     = optional(string, "main")
-  }))
-  default = {
-    "admin-platformspaces" = { repository = "sl-admin-platformspaces" }
-    "admin-modulespaces"   = { repository = "sl-admin-modulespaces" }
-    "admin-policies"       = { repository = "sl-admin-policies" }
-    "admin-modulestacks"   = { repository = "sl-admin-modulestacks" }
-  }
-}
-
 variable "enable_auto_deploy" {
   type        = bool
   default     = false
-  description = "Enables auto-deploy for child management stacks"
+  description = "Enables auto-deploy for Tier 2 administrative tools"
+}
+
+variable "enable_deletion_protection" {
+  type        = bool
+  default     = true
+  description = "Toggles deletion protection for Tier 2 administrative stacks"
 }
