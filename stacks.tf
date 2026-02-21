@@ -25,7 +25,7 @@ locals {
   # Flattened map for for_each: stack_name.var_name
   stack_vars = merge([
     for stack_key, stack in spacelift_stack.management : {
-      for var_key, var_val in locals.replicated_vars : "${stack_key}.${var_key}" => {
+      for var_key, var_val in local.replicated_vars : "${stack_key}.${var_key}" => {
         stack_id = stack.id
         name     = var_key
         value    = var_val
@@ -36,7 +36,7 @@ locals {
 }
 
 resource "spacelift_environment_variable" "child_vars" {
-  for_each = locals.stack_vars
+  for_each = local.stack_vars
 
   stack_id   = each.value.stack_id
   name       = each.value.name
