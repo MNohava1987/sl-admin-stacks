@@ -28,9 +28,6 @@ variable "child_management_stacks" {
     repository = string
     branch     = optional(string, "main")
   }))
-  default = {
-    "admin-platformspaces" = { repository = "sl-admin-platformspaces" }
-    "admin-modulespaces"   = { repository = "sl-admin-modulespaces" }
-    "admin-policies"       = { repository = "sl-admin-policies" }
-  }
+  # Empty map causes destruction of all managed child stacks
+  default = {}
 }
