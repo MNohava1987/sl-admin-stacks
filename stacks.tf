@@ -7,7 +7,6 @@ resource "spacelift_stack" "platformspaces" {
   branch              = var.branch_main
   # Removed to use default
   # github_enterprise_id = var.vcs_integration_id
-  terraform_workflow_tool = "TERRAFORM"
 }
 
 resource "spacelift_stack" "modulespaces" {
@@ -17,7 +16,6 @@ resource "spacelift_stack" "modulespaces" {
   branch              = var.branch_main
   # Removed to use default
   # github_enterprise_id = var.vcs_integration_id
-  terraform_workflow_tool = "TERRAFORM"
 }
 
 resource "spacelift_stack" "policies" {
@@ -27,5 +25,4 @@ resource "spacelift_stack" "policies" {
   branch              = var.branch_main
   # Removed to use default
   # github_enterprise_id = var.vcs_integration_id
-  terraform_workflow_tool = "TERRAFORM"
 }
