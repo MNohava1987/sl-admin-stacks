@@ -8,7 +8,12 @@ variable "spacelift_api_key_secret" {
   sensitive = true
 }
 
-# admin_space_id removed - now handled by data lookup in stacks.tf
+# The name of the environment this orchestrator owns (e.g. "Prod", "Staging")
+# This is injected by the bootstrap stack.
+variable "environment_name" {
+  type        = string
+  description = "Name of the environment container"
+}
 
 variable "vcs_integration_id" {
   type        = string
