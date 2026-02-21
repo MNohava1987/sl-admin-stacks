@@ -2,7 +2,7 @@
 # This looks up the Admin space ID by its static path "root/Admin"
 # so we are no longer dependent on hardcoded random IDs.
 data "spacelift_space_by_path" "admin" {
-  path = "root/Admin"
+  space_path = "root/Admin"
 }
 
 # Dynamic Creation of Management Stacks
