@@ -9,13 +9,10 @@ resource "spacelift_stack" "management" {
   administrative       = true
   enable_local_preview = true
 
-  github_enterprise_id = var.vcs_integration_id
+  # Removed explicit VCS integration ID to use default GitHub integration
 }
 
 # --- Automated Configuration Injection ---
-# This ensures that all child stacks automatically receive the necessary 
-# credentials to manage their own downstream resources.
-
 locals {
   # List of variables to replicate into all children
   replicated_vars = {
