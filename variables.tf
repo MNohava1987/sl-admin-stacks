@@ -29,5 +29,6 @@ variable "child_management_stacks" {
     "admin-platformspaces" = { repository = "sl-admin-platformspaces" }
     "admin-modulespaces"   = { repository = "sl-admin-modulespaces" }
     "admin-policies"       = { repository = "sl-admin-policies" }
+    "admin-modulestacks"   = { repository = "sl-admin-modulestacks" }
   }
 }
