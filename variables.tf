@@ -9,7 +9,8 @@ variable "spacelift_api_key_secret" {
 }
 
 variable "admin_space_id" {
-  type = string
+  type        = string
+  description = "The ID of the Admin space where stacks will be created"
 }
 
 variable "vcs_integration_id" {
@@ -17,22 +18,19 @@ variable "vcs_integration_id" {
   description = "GitHub VCS integration id"
 }
 
-variable "repo_platformspaces" {
-  type    = string
-  default = "sl-admin-platformspaces"
-}
-
-variable "repo_modulespaces" {
-  type    = string
-  default = "sl-admin-modulespaces"
-}
-
-variable "repo_policies" {
-  type    = string
-  default = "sl-admin-policies"
-}
-
 variable "branch_main" {
   type    = string
   default = "main"
+}
+
+variable "child_management_stacks" {
+  type = map(object({
+    repository = string
+    branch     = optional(string, "main")
+  }))
+  default = {
+    "admin-platformspaces" = { repository = "sl-admin-platformspaces" }
+    "admin-modulespaces"   = { repository = "sl-admin-modulespaces" }
+    "admin-policies"       = { repository = "sl-admin-policies" }
+  }
 }
