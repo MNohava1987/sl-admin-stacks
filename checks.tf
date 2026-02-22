@@ -2,7 +2,10 @@
 
 check "manifest_structure" {
   assert {
-    condition     = local.raw_tools_key != "MISSING_KEY" && can(tolist(local.raw_tools_key))
+    condition = (
+      can(local.tool_data.tools) &&
+      can(tolist(local.tool_data.tools))
+    )
     error_message = "The 'tools' key is missing from tooling.yaml or is not a valid list."
   }
 }
