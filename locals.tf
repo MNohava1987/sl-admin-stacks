@@ -18,7 +18,13 @@ locals {
 
   # Resource input map. Skip unnamed entries.
   tools = {
-    for t in local.raw_tools : t.name => merge(t, { role_profile = try(t.role_profile, "") })
+    for t in local.raw_tools : t.name => merge(t, {
+      role_profile = try(t.role_profile, "")
+      branch       = try(t.branch, var.branch_main)
+      project_root = try(t.project_root, var.default_tool_project_root)
+      autodeploy   = try(t.autodeploy, var.enable_auto_deploy)
+      protect      = try(t.protect_from_deletion, var.enable_deletion_protection)
+    })
     if try(t.name, "") != ""
   }
 
@@ -28,8 +34,28 @@ locals {
 
   # Variables propagated to child stacks.
   replicated_vars = {
-    "TF_VAR_environment_name" = var.environment_name
-    "TF_VAR_assurance_tier"   = var.assurance_tier
+    "TF_VAR_environment_name"                  = var.environment_name
+    "TF_VAR_assurance_tier"                    = var.assurance_tier
+    "TF_VAR_naming_org"                        = var.naming_org
+    "TF_VAR_naming_domain"                     = var.naming_domain
+    "TF_VAR_naming_function_env_root_space"    = var.naming_function_env_root_space
+    "TF_VAR_admin_sub_space_name"              = var.admin_sub_space_name
+    "TF_VAR_naming_function_tool_orchestrator" = var.naming_function_tool_orchestrator
+  }
+
+  tool_function_tokens = [
+    for name in local.tool_names_lower :
+    "${name}-${var.naming_function_tool_orchestrator}"
+  ]
+
+  tool_stack_names = {
+    for name, _ in local.tools :
+    name => "${var.naming_org}-${lower(var.environment_name)}-${var.naming_domain}-${lower(name)}-${var.naming_function_tool_orchestrator}"
+  }
+
+  tool_stack_slugs = {
+    for name, _ in local.tools :
+    name => lower(local.tool_stack_names[name])
   }
 
   stack_vars = merge([

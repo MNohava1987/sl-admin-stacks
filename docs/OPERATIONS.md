@@ -13,6 +13,8 @@ Tier-1 naming inputs should be injected by root bootstrap (`TF_VAR_naming_org`, 
 - **Uniqueness**: Tool names are validated for case-insensitive uniqueness to prevent slug collisions.
 - **Lowercase Policy**: By default, tool names must be lowercase. This can be toggled via the `enforce_lowercase_tool_names` variable.
 - **Role Assignment**: Every tool must include `role_profile`. Profiles are validated against `allowed_role_profiles`.
+- **Per-Tool Controls**: `branch`, `project_root`, `autodeploy`, and `protect_from_deletion` can be set per tool.
+- **Naming Standard**: Tier-2 stacks are generated as `<org>-<env>-<domain>-<function>` where function is `<tool>-orchestrator`.
 
 ### Adding a New Tool:
 1. Open `manifests/tooling.yaml`.
@@ -23,6 +25,10 @@ Tier-1 naming inputs should be injected by root bootstrap (`TF_VAR_naming_org`, 
      description: "Description of the tool purpose"
      assurance_tier: "tier-2"
      role_profile: "stack-manager"
+     branch: "main"
+     project_root: "/"
+     autodeploy: false
+     protect_from_deletion: true
    ```
 3. Commit and push the changes. The orchestrator will autonomously provision the new stack.
 

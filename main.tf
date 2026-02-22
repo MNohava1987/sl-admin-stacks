@@ -2,21 +2,22 @@
 resource "spacelift_stack" "tooling" {
   for_each = local.tools
 
-  name        = "${each.value.name}-orchestrator"
+  name        = local.tool_stack_names[each.key]
   description = "${each.value.description} for the ${var.environment_name} environment"
 
-  # Deterministic lowercase slug avoids account-level collisions.
-  slug = lower("${var.environment_name}-${each.value.name}")
+  # Deterministic canonical slug avoids account-level collisions.
+  slug = local.tool_stack_slugs[each.key]
 
-  space_id   = data.spacelift_space_by_path.admin.id
-  repository = each.value.repository
-  branch     = var.branch_main
+  space_id     = data.spacelift_space_by_path.admin.id
+  repository   = each.value.repository
+  branch       = each.value.branch
+  project_root = each.value.project_root
 
-  autodeploy           = var.enable_auto_deploy
+  autodeploy           = each.value.autodeploy
   enable_local_preview = true
   # DANGER: If false, these management stacks can be deleted.
   # Keep true for normal operations.
-  protect_from_deletion = var.enable_deletion_protection
+  protect_from_deletion = each.value.protect
 
   # Governance labels used by policy controls.
   labels = [

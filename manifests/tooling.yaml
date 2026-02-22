@@ -8,18 +8,34 @@ tools:
     description: "Workload isolation and team tenancy management"
     assurance_tier: "tier-2"
     role_profile: "space-manager"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: true
   - name: "module-spaces"
     repository: "sl-admin-modulespaces"
     description: "Private registry isolation and management"
     assurance_tier: "tier-2"
     role_profile: "space-manager"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: true
   - name: "policy-manager"
     repository: "sl-admin-policies"
     description: "Global OPA policy distribution and lifecycle"
     assurance_tier: "tier-2"
     role_profile: "policy-manager"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: true
   - name: "blueprints"
     repository: "sl-admin-blueprints"
     description: "Blueprint catalog and lifecycle management"
     assurance_tier: "tier-2"
     role_profile: "stack-manager"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: true

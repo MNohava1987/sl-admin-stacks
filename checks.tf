@@ -43,6 +43,16 @@ check "tool_role_profile_validity" {
   }
 }
 
+check "role_profile_slug_safety" {
+  assert {
+    condition = alltrue([
+      for profile, slug in var.role_profile_role_slugs :
+      profile == "space-admin" || slug != "space-admin"
+    ])
+    error_message = "Non-admin role profiles must not map to space-admin."
+  }
+}
+
 check "role_profile_slug_map_complete" {
   assert {
     condition     = alltrue([for profile in var.allowed_role_profiles : contains(keys(var.role_profile_role_slugs), profile)])
@@ -58,14 +68,41 @@ check "tool_required_fields_safe" {
         try(t.repository, "") != "" &&
         try(t.description, "") != "" &&
         try(t.assurance_tier, "") != "" &&
-        try(t.role_profile, "") != ""
+        try(t.role_profile, "") != "" &&
+        try(t.branch, var.branch_main) != "" &&
+        try(t.project_root, var.default_tool_project_root) != ""
       )
     ])
-    error_message = "One or more tools in tooling.yaml are missing required fields (name, repository, description, assurance_tier, role_profile)."
+    error_message = "One or more tools in tooling.yaml are missing required fields (name, repository, description, assurance_tier, role_profile, branch, project_root)."
   }
 }
 
 # --- Runtime Controls ---
+
+check "naming_tokens_valid" {
+  assert {
+    condition = alltrue([
+      can(regex(var.naming_token_regex, var.naming_org)),
+      can(regex(var.naming_token_regex, var.naming_domain)),
+      can(regex(var.naming_token_regex, var.naming_function_env_root_space)),
+      can(regex(var.naming_token_regex, var.admin_sub_space_name)),
+      can(regex(var.naming_token_regex, var.naming_function_tool_orchestrator)),
+      alltrue([for n in local.tool_names_lower : can(regex(var.naming_token_regex, n))]),
+      alltrue([for f in local.tool_function_tokens : can(regex(var.naming_token_regex, f))])
+    ])
+    error_message = "One or more naming tokens are invalid for the naming_token_regex contract."
+  }
+}
+
+check "stack_names_and_slugs_length" {
+  assert {
+    condition = alltrue(concat(
+      [for _, n in local.tool_stack_names : length(n) <= var.naming_max_length],
+      [for _, s in local.tool_stack_slugs : length(s) <= var.naming_max_length]
+    ))
+    error_message = "Generated tooling stack name/slug exceeds naming_max_length."
+  }
+}
 
 check "tooling_governance" {
   assert {

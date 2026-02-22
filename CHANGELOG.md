@@ -2,6 +2,16 @@
 
 All notable changes to the Spacelift Admin Stacks Orchestrator will be documented in this file.
 
+## [1.4.0] - 2026-02-22
+### Changed
+- Tier-2 stack naming now follows `<org>-<env>-<domain>-<function>` with function `<tool>-orchestrator`.
+- Tooling manifest now supports per-tool `branch`, `project_root`, `autodeploy`, and `protect_from_deletion`.
+- Tier-1 now propagates naming variables to child stacks to prevent downstream drift.
+
+### Fixed
+- Strengthened RBAC safety: non-admin profiles are no longer allowed to map to `space-admin`.
+- Added naming contract checks for generated stack names/slugs (pattern and max length).
+
 ## [1.3.0] - 2026-02-22
 ### Changed
 - Removed `module-publisher` (`sl-admin-modulestacks`) from `manifests/tooling.yaml`.

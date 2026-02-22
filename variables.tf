@@ -13,6 +13,12 @@ variable "branch_main" {
   default = "main"
 }
 
+variable "default_tool_project_root" {
+  type        = string
+  default     = "/"
+  description = "Default project_root for child tooling stacks when omitted in manifest."
+}
+
 variable "naming_org" {
   type        = string
   default     = "sl"
@@ -35,6 +41,24 @@ variable "admin_sub_space_name" {
   type        = string
   default     = "admin"
   description = "Sub-space name used by Tier-1 orchestrators."
+}
+
+variable "naming_function_tool_orchestrator" {
+  type        = string
+  default     = "orchestrator"
+  description = "Suffix token appended to tool name for <org>-<env>-<domain>-<function> stack naming."
+}
+
+variable "naming_token_regex" {
+  type        = string
+  default     = "^[a-z0-9]+(-[a-z0-9]+)*$"
+  description = "Regex contract for naming tokens."
+}
+
+variable "naming_max_length" {
+  type        = number
+  default     = 63
+  description = "Maximum length for generated stack names/slugs."
 }
 
 variable "enable_auto_deploy" {
@@ -78,10 +102,10 @@ variable "allowed_role_profiles" {
 variable "role_profile_role_slugs" {
   type = map(string)
   default = {
-    "stack-manager"    = "space-admin"
-    "space-manager"    = "space-admin"
-    "policy-manager"   = "space-admin"
-    "readonly-auditor" = "space-admin"
+    "stack-manager"    = "sl-mgmt-role-stack-manager"
+    "space-manager"    = "sl-mgmt-role-space-manager"
+    "policy-manager"   = "sl-mgmt-role-policy-manager"
+    "readonly-auditor" = "sl-mgmt-role-readonly-auditor"
     "space-admin"      = "space-admin"
   }
   description = "Map of role profiles to Spacelift role slugs. Override from bootstrap outputs as custom roles are introduced."

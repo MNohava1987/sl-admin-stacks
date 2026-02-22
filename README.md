@@ -21,6 +21,7 @@ Space discovery follows the same naming catalog as root bootstrap by default:
   - `TF_VAR_naming_function_env_root_space`
   - `TF_VAR_admin_sub_space_name`
   to keep Tier-1 lookups aligned with Tier-0 naming.
+Tier-2 stack names now follow `<org>-<env>-<domain>-<function>` where function is `<tool>-orchestrator`.
 
 ## Operational Workflow
 
@@ -30,6 +31,7 @@ Add or remove tools by editing the `manifests/tooling.yaml` file. The orchestrat
 - Tool names should be unique (case-insensitive) and lowercase by default.
 - Every tool must declare a `role_profile` (for example `space-manager` or `policy-manager`).
 - Role profiles resolve to role slugs through `var.role_profile_role_slugs` (override from bootstrap role catalog outputs).
+- Tool entries support per-tool `branch`, `project_root`, `autodeploy`, and `protect_from_deletion`.
 
 ### Local Validation
 Execute the high-assurance validation gate from any directory in the repo before committing:
