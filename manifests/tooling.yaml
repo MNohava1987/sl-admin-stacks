@@ -7,7 +7,7 @@ tools:
     repository: "sl-admin-platformspaces"
     description: "Workload isolation and team tenancy management"
     assurance_tier: "tier-2"
-    role_profile: "space-manager"
+    role_profile: "space-admin"
     branch: "main"
     project_root: "/"
     autodeploy: false
@@ -16,7 +16,7 @@ tools:
     repository: "sl-admin-modulespaces"
     description: "Private registry isolation and management"
     assurance_tier: "tier-2"
-    role_profile: "space-manager"
+    role_profile: "space-admin"
     branch: "main"
     project_root: "/"
     autodeploy: false
