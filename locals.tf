@@ -17,7 +17,7 @@ locals {
   )
   enabled_raw_tools = [
     for t in local.raw_tools : t
-    if try(t.enabled, true)
+    if local.cfg_enable_component && try(t.enabled, true)
   ]
 
   # Helper values used by checks.
