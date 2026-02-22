@@ -11,7 +11,7 @@ tools:
     branch: "main"
     project_root: "/"
     autodeploy: false
-    protect_from_deletion: true
+    protect_from_deletion: false
   - name: "module-spaces"
     repository: "sl-admin-modulespaces"
     description: "Private registry isolation and management"
@@ -20,7 +20,7 @@ tools:
     branch: "main"
     project_root: "/"
     autodeploy: false
-    protect_from_deletion: true
+    protect_from_deletion: false
   - name: "policy-manager"
     repository: "sl-admin-policies"
     description: "Global OPA policy distribution and lifecycle"
@@ -29,7 +29,7 @@ tools:
     branch: "main"
     project_root: "/"
     autodeploy: false
-    protect_from_deletion: true
+    protect_from_deletion: false
   - name: "blueprints"
     repository: "sl-admin-blueprints"
     description: "Blueprint catalog and lifecycle management"
@@ -38,4 +38,4 @@ tools:
     branch: "main"
     project_root: "/"
     autodeploy: false
-    protect_from_deletion: true
+    protect_from_deletion: false

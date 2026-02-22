@@ -110,3 +110,10 @@ check "tooling_governance" {
     error_message = "All administrative tools MUST be labeled as 'stack-type:management' for git-flow enforcement."
   }
 }
+
+check "destructive_changes_require_repave_mode" {
+  assert {
+    condition     = var.enable_deletion_protection || var.repave_mode
+    error_message = "Disabling deletion protection requires repave_mode=true for explicit operator intent."
+  }
+}

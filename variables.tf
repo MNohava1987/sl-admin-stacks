@@ -69,8 +69,14 @@ variable "enable_auto_deploy" {
 
 variable "enable_deletion_protection" {
   type        = bool
-  default     = true
+  default     = false
   description = "DANGER: If false, Tier-2 management stacks can be deleted. Keep true for normal operations."
+}
+
+variable "repave_mode" {
+  type        = bool
+  default     = true
+  description = "Set true only for intentional teardown/repave operations when deletion protection is disabled."
 }
 
 # --- Contract Settings ---
