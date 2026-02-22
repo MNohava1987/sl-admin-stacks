@@ -2,6 +2,15 @@
 
 All notable changes to the Spacelift Admin Stacks Orchestrator will be documented in this file.
 
+## [1.3.0] - 2026-02-22
+### Changed
+- Removed `module-publisher` (`sl-admin-modulestacks`) from `manifests/tooling.yaml`.
+- Module manager responsibilities are now owned by `sl-admin-modulespaces` per bucket.
+- Added `blueprints` (`sl-admin-blueprints`) to `manifests/tooling.yaml`.
+
+### Fixed
+- Eliminated Tier-2 overlap between `sl-admin-modulestacks` and `sl-admin-modulespaces`.
+
 ## [1.2.0] - 2026-02-22
 ### Changed
 - Aligned Terraform comments with `sl-root-bootstrap` style: short, direct, and operational.
