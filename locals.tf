@@ -11,8 +11,10 @@ locals {
   cfg_repave_mode                = try(local.tool_data.settings.repave_mode, var.repave_mode)
 
   # Safe fallbacks for generation paths.
-  raw_tools_list = try(local.tool_data.tools, [])
-  raw_tools      = local.raw_tools_list == null ? [] : local.raw_tools_list
+  raw_tools = try(
+    [for t in local.tool_data.tools : t],
+    []
+  )
   enabled_raw_tools = [
     for t in local.raw_tools : t
     if try(t.enabled, true)
