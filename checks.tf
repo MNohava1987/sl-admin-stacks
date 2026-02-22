@@ -15,9 +15,21 @@ check "manifest_version_support" {
   }
 }
 
+check "manifest_settings_flags_boolean" {
+  assert {
+    condition = alltrue([
+      can(tobool(local.cfg_enable_component)),
+      can(tobool(local.cfg_enable_auto_deploy)),
+      can(tobool(local.cfg_enable_deletion_protection)),
+      can(tobool(local.cfg_repave_mode))
+    ])
+    error_message = "tooling.yaml settings flags (enable_component, enable_auto_deploy, enable_deletion_protection, repave_mode) must be boolean."
+  }
+}
+
 check "tool_name_uniqueness_case_insensitive" {
   assert {
-    condition     = length(distinct(local.tool_names_lower)) == length(local.raw_tools)
+    condition     = length(distinct(local.tool_names_lower)) == length(local.enabled_raw_tools)
     error_message = "Duplicate tool names (case-insensitive) detected in tooling.yaml. Names must be unique regardless of casing."
   }
 }
@@ -63,7 +75,7 @@ check "role_profile_slug_map_complete" {
 check "tool_required_fields_safe" {
   assert {
     condition = alltrue([
-      for t in local.raw_tools : (
+      for t in local.enabled_raw_tools : (
         try(t.name, "") != "" &&
         try(t.repository, "") != "" &&
         try(t.description, "") != "" &&
@@ -74,6 +86,33 @@ check "tool_required_fields_safe" {
       )
     ])
     error_message = "One or more tools in tooling.yaml are missing required fields (name, repository, description, assurance_tier, role_profile, branch, project_root)."
+  }
+}
+
+check "tool_dependency_fields_safe" {
+  assert {
+    condition = alltrue([
+      for t in local.enabled_raw_tools : (
+        try(t.depends_on_tools, null) == null || can(tolist(t.depends_on_tools))
+      )
+    ])
+    error_message = "depends_on_tools must be a list when provided in tooling.yaml."
+  }
+}
+
+check "tool_dependencies_exist" {
+  assert {
+    condition = alltrue([
+      for dep in local.tool_dependency_pairs : contains(keys(local.tools), dep.depends_on)
+    ])
+    error_message = "One or more depends_on_tools entries reference a tool that is not enabled/present in tooling.yaml."
+  }
+}
+
+check "tool_dependencies_no_self_reference" {
+  assert {
+    condition     = alltrue([for dep in local.tool_dependency_pairs : dep.stack != dep.depends_on])
+    error_message = "A tool cannot depend on itself via depends_on_tools."
   }
 }
 
@@ -113,7 +152,7 @@ check "tooling_governance" {
 
 check "destructive_changes_require_repave_mode" {
   assert {
-    condition     = var.enable_deletion_protection || var.repave_mode
+    condition     = local.cfg_enable_deletion_protection || local.cfg_repave_mode
     error_message = "Disabling deletion protection requires repave_mode=true for explicit operator intent."
   }
 }

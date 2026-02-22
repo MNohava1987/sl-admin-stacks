@@ -2,40 +2,51 @@
 # These tools are deployed into every environment's Admin space.
 manifest_version: "1"
 
+settings:
+  enable_component: true
+  enable_auto_deploy: true
+  enable_deletion_protection: false
+  repave_mode: true
+
 tools:
-  # - name: "platform-spaces"
-  #   repository: "sl-admin-platformspaces"
-  #   description: "Workload isolation and team tenancy management"
-  #   assurance_tier: "tier-2"
-  #   role_profile: "space-admin"
-  #   branch: "main"
-  #   project_root: "/"
-  #   autodeploy: false
-  #   protect_from_deletion: false
-  # - name: "module-spaces"
-  #   repository: "sl-admin-modulespaces"
-  #   description: "Private registry isolation and management"
-  #   assurance_tier: "tier-2"
-  #   role_profile: "space-admin"
-  #   branch: "main"
-  #   project_root: "/"
-  #   autodeploy: false
-  #   protect_from_deletion: false
-  # - name: "policy-manager"
-  #   repository: "sl-admin-policies"
-  #   description: "Global OPA policy distribution and lifecycle"
-  #   assurance_tier: "tier-2"
-  #   role_profile: "policy-manager"
-  #   branch: "main"
-  #   project_root: "/"
-  #   autodeploy: false
-  #   protect_from_deletion: false
-  # - name: "blueprints"
-  #   repository: "sl-admin-blueprints"
-  #   description: "Blueprint catalog and lifecycle management"
-  #   assurance_tier: "tier-2"
-  #   role_profile: "stack-manager"
-  #   branch: "main"
-  #   project_root: "/"
-  #   autodeploy: false
-  #   protect_from_deletion: false
+  - name: "platform-spaces"
+    enabled: false
+    repository: "sl-admin-platformspaces"
+    description: "Workload isolation and team tenancy management"
+    assurance_tier: "tier-2"
+    role_profile: "space-admin"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: false
+  - name: "module-spaces"
+    enabled: false
+    depends_on_tools: ["platform-spaces"]
+    repository: "sl-admin-modulespaces"
+    description: "Private registry isolation and management"
+    assurance_tier: "tier-2"
+    role_profile: "space-admin"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: false
+  - name: "policy-manager"
+    enabled: false
+    repository: "sl-admin-policies"
+    description: "Global OPA policy distribution and lifecycle"
+    assurance_tier: "tier-2"
+    role_profile: "policy-manager"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: false
+  - name: "blueprints"
+    enabled: false
+    repository: "sl-admin-blueprints"
+    description: "Blueprint catalog and lifecycle management"
+    assurance_tier: "tier-2"
+    role_profile: "stack-manager"
+    branch: "main"
+    project_root: "/"
+    autodeploy: false
+    protect_from_deletion: false
