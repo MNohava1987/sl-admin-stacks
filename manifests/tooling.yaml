@@ -1,20 +1,25 @@
 # Regional Tooling Arsenal
 # These tools are deployed into every environment's Admin space.
+manifest_version: "1"
 
 tools:
   - name: "platform-spaces"
     repository: "sl-admin-platformspaces"
     description: "Workload isolation and team tenancy management"
     assurance_tier: "tier-2"
+    role_profile: "space-manager"
   - name: "module-spaces"
     repository: "sl-admin-modulespaces"
     description: "Private registry isolation and management"
     assurance_tier: "tier-2"
+    role_profile: "space-manager"
   - name: "policy-manager"
     repository: "sl-admin-policies"
     description: "Global OPA policy distribution and lifecycle"
     assurance_tier: "tier-2"
+    role_profile: "policy-manager"
   - name: "module-publisher"
     repository: "sl-admin-modulestacks"
     description: "CI/CD pipelines for internal infrastructure modules"
     assurance_tier: "tier-2"
+    role_profile: "stack-manager"

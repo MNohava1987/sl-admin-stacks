@@ -1,4 +1,3 @@
-provider "spacelift" {
-  api_key_id     = var.spacelift_api_key_id
-  api_key_secret = var.spacelift_api_key_secret
-}
+# Spacelift injects auth at runtime in workers.
+# Local runs use your local provider credentials.
+provider "spacelift" {}

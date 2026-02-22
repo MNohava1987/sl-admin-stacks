@@ -1,41 +1,31 @@
-# Spacelift Admin Stacks Orchestrator
+# Spacelift Admin Stacks Orchestrator (Tier 1)
 
-This repository serves as the primary orchestrator for the Spacelift management plane. It follows a "High Assurance" pattern to dynamically manage and secure all downstream administrative stacks.
+This repository runs the Tier-1 orchestrator for a single environment (for example `live` or `test`). It deploys and governs Tier-2 admin tooling stacks from a manifest.
 
-## Overview
+## Purpose
 
-The orchestrator manages the following components:
-1. **Platform Spaces**: Environment-specific spaces (Dev, Test, Prod) for workload isolation.
-2. **Module Spaces**: Dedicated spaces for internal infrastructure modules.
-3. **Global Policies**: Account-wide OPA/Rego policies for governance and guardrails.
+The orchestrator bridges the gap between the foundation and the workloads. It is responsible for:
+1. Deploying Tier 2 administrative stacks (Platform Spaces, Policies, etc.) defined in the manifest.
+2. Granting child tools administrative authority over their regional environment.
+3. Propagating regional context (Environment Name, Assurance Tier) to all child resources.
 
-## High Assurance Features
+## Architecture: Manifest-Driven Tooling
 
-- **Self-Aware Space Lookup**: Uses `data.spacelift_space_by_path` to resolve its location dynamically, eliminating hardcoded IDs.
-- **Automated Secret Propagation**: Automatically injects API keys and VCS configurations into all child stacks via `locals.tf` logic.
-- **Data-Driven Management**: Stacks are managed via a central map in `variables.tf`, allowing for easy scaling.
+The tooling catalog is manifest-driven in `manifests/tooling.yaml`.
 
-## Repository Structure
+## Operational Workflow
 
-```text
-.
-├── .spacelift/          # Quality gates and formatting hooks
-├── docs/                # Operational and scale guides
-├── main.tf              # Primary stack and variable resource definitions
-├── data.tf              # Dynamic resource lookups (Space IDs)
-├── locals.tf            # Complex transformation logic for child stacks
-├── variables.tf         # Input definitions and child stack registry
-├── outputs.tf           # Orchestrator status and resolved IDs
-├── providers.tf         # Provider configuration
-└── versions.tf          # Version constraints
-```
+### Scaling the Arsenal
+Add or remove tools by editing the `manifests/tooling.yaml` file. The orchestrator will automatically synchronize the state during the next run. Ensure the following standards are met:
+- `manifest_version` must be a supported version (default: `"1"`).
+- Tool names should be unique (case-insensitive) and lowercase by default.
+- Every tool must declare a `role_profile` (for example `space-manager` or `policy-manager`).
+- Role profiles resolve to role slugs through `var.role_profile_role_slugs` (override from bootstrap role catalog outputs).
 
-## Management Flow
+### Local Validation
+Execute the high-assurance validation gate from any directory in the repo before committing:
+`./scripts/assurance-gate.sh`
 
-1. This stack is created by the `sl-root-bootstrap` process.
-2. It resides in the **Admin** space.
-3. It must be granted **Administrative** permissions in its Behavior settings to manage downstream resources.
+## Governance
 
-## Operational Instructions
-
-See [docs/OPERATIONS.md](docs/OPERATIONS.md) for detailed instructions on adding new stacks or handling management plane recovery.
+This stack must be labeled with `assurance:tier-1` and `stack-type:management` to trigger the appropriate organizational guardrails. Its children are autonomously labeled as `assurance:tier-2`.

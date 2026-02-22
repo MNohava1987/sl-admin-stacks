@@ -1,27 +1,46 @@
-# Orchestrator Operations Guide
+# Orchestrator Operations Manual
 
-This document explains how to manage and scale the Spacelift administrative fleet.
+This guide covers operation of the `sl-admin-stacks` Tier-1 orchestrator.
 
-## High-to-Low Assurance Model
-This repository acts as the **Tier 1 Orchestrator**. 
-- **Tier 0 (Bootstrap)**: Manual seed, creates this orchestrator.
-- **Tier 1 (Admin Stacks)**: Automates the creation of all administrative "Spaces" and "Policies".
-- **Tier 2 (Platform/Modules)**: Manages actual cloud resources and developer modules.
+## Managing the Tooling Arsenal
 
-## Adding a New Administrative Stack
-To add a new stack to the management plane (e.g., `admin-blueprints`):
+The regional management plane is driven by `manifests/tooling.yaml`. 
 
-1. Open `variables.tf`.
-2. Add the stack to the `child_management_stacks` map:
-   ```hcl
-   "admin-blueprints" = { repository = "sl-admin-blueprints" }
+### Manifest Standards:
+- **Versioning**: `manifest_version` must match one of `supported_manifest_versions` (default: `"1"`).
+- **Uniqueness**: Tool names are validated for case-insensitive uniqueness to prevent slug collisions.
+- **Lowercase Policy**: By default, tool names must be lowercase. This can be toggled via the `enforce_lowercase_tool_names` variable.
+- **Role Assignment**: Every tool must include `role_profile`. Profiles are validated against `allowed_role_profiles`.
+
+### Adding a New Tool:
+1. Open `manifests/tooling.yaml`.
+2. Add a new tool entry under the `tools` list:
+   ```yaml
+   - name: "new-admin-tool"
+     repository: "sl-admin-repo"
+     description: "Description of the tool purpose"
+     assurance_tier: "tier-2"
+     role_profile: "stack-manager"
    ```
-3. Commit and push.
+3. Commit and push the changes. The orchestrator will autonomously provision the new stack.
 
-**Result**: The orchestrator will create the stack and automatically inject all required API keys and VCS configurations. No manual setup is required for the new child.
+### Role Profile Mapping:
+- Tool `role_profile` values are mapped to Spacelift role slugs via `role_profile_role_slugs` in `variables.tf`.
+- During bootstrap, defaults can map profiles to `space-admin`.
+- After bootstrap role catalog rollout, override this map from `sl-root-bootstrap` outputs (`role_profile_role_slugs` or `role_catalog` mapping strategy).
 
-## Handling a Repave
-If the management plane is destroyed:
-1. Run the `sl-root-bootstrap` repave process.
-2. Once the `admin-stacks` orchestrator is restored, trigger its deployment.
-3. It will restore all child stacks (`platformspaces`, `modulespaces`, `policies`) and restore their environment variables from its own state.
+### Tooling Backlog:
+Planning candidates for future tooling stacks are tracked in:
+`docs/tooling/ADMIN_TOOL_CANDIDATES.md`
+
+### Context Propagation:
+The orchestrator automatically injects the following variables into every child tool:
+- `TF_VAR_environment_name`: Injected from the parent environment.
+- `TF_VAR_assurance_tier`: Injected based on the environment's criticality.
+
+## Validation Workflow
+
+Before merging changes to the arsenal, run the local validation gate:
+`./scripts/assurance-gate.sh`
+
+This script ensures that your HCL is valid and that your `tooling.yaml` manifest complies with the organizational contract.
