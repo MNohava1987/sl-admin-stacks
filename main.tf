@@ -12,8 +12,8 @@ resource "spacelift_stack" "tooling" {
   repository = each.value.repository
   branch     = var.branch_main
 
-  autodeploy            = var.enable_auto_deploy
-  enable_local_preview  = true
+  autodeploy           = var.enable_auto_deploy
+  enable_local_preview = true
   # DANGER: If false, these management stacks can be deleted.
   # Keep true for normal operations.
   protect_from_deletion = var.enable_deletion_protection
@@ -32,7 +32,7 @@ resource "spacelift_role_attachment" "tooling_admin" {
   for_each = local.tools
 
   stack_id = spacelift_stack.tooling[each.key].id
-  role_id  = lookup(local.role_profile_to_role_id, each.value.role_profile, local.role_profile_to_role_id["space-admin"])
+  role_id  = local.role_profile_to_role_id[each.value.role_profile]
   space_id = data.spacelift_space_by_path.env_root.id
 }
 

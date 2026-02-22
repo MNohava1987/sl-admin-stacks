@@ -15,6 +15,12 @@ The tooling catalog is manifest-driven in `manifests/tooling.yaml`.
 Space discovery follows the same naming catalog as root bootstrap by default:
 - Environment root path: `root/sl-<env>-mgmt-env-root-space`
 - Admin sub-space path: `root/sl-<env>-mgmt-env-root-space/admin`
+- Bootstrap should inject:
+  - `TF_VAR_naming_org`
+  - `TF_VAR_naming_domain`
+  - `TF_VAR_naming_function_env_root_space`
+  - `TF_VAR_admin_sub_space_name`
+  to keep Tier-1 lookups aligned with Tier-0 naming.
 
 ## Operational Workflow
 

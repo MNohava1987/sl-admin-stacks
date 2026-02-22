@@ -6,6 +6,7 @@ This guide covers operation of the `sl-admin-stacks` Tier-1 orchestrator.
 
 The regional management plane is driven by `manifests/tooling.yaml`. 
 Space lookups use the root naming convention by default (`sl-<env>-mgmt-env-root-space` + `/admin`).
+Tier-1 naming inputs should be injected by root bootstrap (`TF_VAR_naming_org`, `TF_VAR_naming_domain`, `TF_VAR_naming_function_env_root_space`, `TF_VAR_admin_sub_space_name`) to prevent drift.
 
 ### Manifest Standards:
 - **Versioning**: `manifest_version` must match one of `supported_manifest_versions` (default: `"1"`).
