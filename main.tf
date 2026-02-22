@@ -46,3 +46,18 @@ resource "spacelift_environment_variable" "child_vars" {
   value      = each.value.value
   write_only = false
 }
+
+# Execute in-stack destroys before deleting Tier-2 tooling stacks during repave.
+resource "spacelift_stack_destructor" "tooling" {
+  for_each = spacelift_stack.tooling
+
+  stack_id = each.value.id
+
+  discard_runs = true
+  deactivated  = !var.repave_mode
+
+  depends_on = [
+    spacelift_role_attachment.tooling_admin,
+    spacelift_environment_variable.child_vars
+  ]
+}
