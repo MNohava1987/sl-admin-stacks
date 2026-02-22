@@ -12,6 +12,9 @@ The orchestrator bridges the gap between the foundation and the workloads. It is
 ## Architecture: Manifest-Driven Tooling
 
 The tooling catalog is manifest-driven in `manifests/tooling.yaml`.
+Space discovery follows the same naming catalog as root bootstrap by default:
+- Environment root path: `root/sl-<env>-mgmt-env-root-space`
+- Admin sub-space path: `root/sl-<env>-mgmt-env-root-space/admin`
 
 ## Operational Workflow
 

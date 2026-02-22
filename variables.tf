@@ -13,6 +13,30 @@ variable "branch_main" {
   default = "main"
 }
 
+variable "naming_org" {
+  type        = string
+  default     = "sl"
+  description = "Organization token used by the naming convention."
+}
+
+variable "naming_domain" {
+  type        = string
+  default     = "mgmt"
+  description = "Domain token used by the naming convention."
+}
+
+variable "naming_function_env_root_space" {
+  type        = string
+  default     = "env-root-space"
+  description = "Function token for top-level environment root spaces."
+}
+
+variable "admin_sub_space_name" {
+  type        = string
+  default     = "admin"
+  description = "Sub-space name used by Tier-1 orchestrators."
+}
+
 variable "enable_auto_deploy" {
   type        = bool
   default     = false

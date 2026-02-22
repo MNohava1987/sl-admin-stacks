@@ -5,6 +5,7 @@ This guide covers operation of the `sl-admin-stacks` Tier-1 orchestrator.
 ## Managing the Tooling Arsenal
 
 The regional management plane is driven by `manifests/tooling.yaml`. 
+Space lookups use the root naming convention by default (`sl-<env>-mgmt-env-root-space` + `/admin`).
 
 ### Manifest Standards:
 - **Versioning**: `manifest_version` must match one of `supported_manifest_versions` (default: `"1"`).

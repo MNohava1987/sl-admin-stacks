@@ -12,6 +12,7 @@ All notable changes to the Spacelift Admin Stacks Orchestrator will be documente
 ### Fixed
 - Strengthened deletion-protection warnings in code and variable descriptions.
 - Aligned manifest version examples and defaults to `"1"` across docs, variables, and `manifests/tooling.yaml`.
+- Updated environment space path resolution to match root naming convention (`sl-<env>-mgmt-env-root-space`).
 
 ## [1.1.0] - 2026-02-21
 ### Added
