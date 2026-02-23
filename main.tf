@@ -47,14 +47,6 @@ resource "spacelift_environment_variable" "child_vars" {
   write_only = false
 }
 
-# Enforce run ordering between child tooling stacks.
-resource "spacelift_stack_dependency" "tooling" {
-  for_each = local.tool_dependency_edges
-
-  stack_id            = spacelift_stack.tooling[each.value.stack].id
-  depends_on_stack_id = spacelift_stack.tooling[each.value.depends_on].id
-}
-
 # Execute in-stack destroys before deleting Tier-2 tooling stacks during repave.
 resource "spacelift_stack_destructor" "tooling" {
   for_each = spacelift_stack.tooling
